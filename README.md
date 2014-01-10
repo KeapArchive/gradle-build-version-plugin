@@ -17,11 +17,13 @@ version = buildVersion.version
 
 buildscript {
     repositories {
-        mavenLocal()
+        maven {
+            url 'https://geonet.artifactoryonline.com/geonet/public-releases'
+        }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '0.0.1-SNAPSHOT'
+        classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '1.0.0'
 
     }
 }
