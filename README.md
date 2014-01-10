@@ -24,7 +24,6 @@ buildscript {
     }
     dependencies {
         classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '1.0.0'
-
     }
 }
 
