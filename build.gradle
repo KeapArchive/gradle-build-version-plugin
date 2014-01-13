@@ -1,9 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
+apply plugin: 'build-version'
 
 group = 'nz.org.geonet'
-version = '1.0.1'
+// Dog food in the build version from a previous release of this project.
+version = buildVersion.version
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -11,6 +13,20 @@ targetCompatibility = 1.7
 repositories {
     mavenCentral()
 }
+
+buildscript {
+    repositories {
+        maven {
+            url 'https://geonet.artifactoryonline.com/geonet/public-releases'
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '1.0.1'
+
+    }
+}
+
 
 dependencies {
     compile gradleApi()
