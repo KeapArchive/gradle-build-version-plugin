@@ -7,7 +7,8 @@ class BuildVersionPlugin implements Plugin<Project> {
 
     void apply(Project project) {
         project.configure(project) {
-            extensions.create("buildVersion", BuildVersionExtension)
+            BuildVersionExtension extension = extensions.create("buildVersion", BuildVersionExtension)
+            extension.setGitVersion(new GitVersion(project.getRootProject().projectDir.absolutePath))
         }
 
         if (System.getProperty("isRelease") && "true".equals(System.getProperty("isRelease"))) {

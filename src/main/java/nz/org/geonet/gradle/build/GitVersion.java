@@ -12,6 +12,7 @@ import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +24,12 @@ import java.util.regex.Pattern;
  * Methods to find build versions from a Git repo.
  */
 public class GitVersion {
+
+    private final String gitDir;
+
+    public GitVersion(String gitDir) {
+        this.gitDir = gitDir;
+    }
 
     /**
      * Will search the local Git repo for tags and return a snapshot version or release version based on isRelease.
@@ -60,6 +67,10 @@ public class GitVersion {
     }
 
 
+    public String getGitDir() {
+        return gitDir;
+    }
+
     /**
      * Searches a Git repository for annotated tags that match releaseTagPattern and returns the name
      * of the highest tag based on natural sort order.
@@ -78,7 +89,7 @@ public class GitVersion {
 
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repository = builder
-                .readEnvironment()
+                .setWorkTree(new File(gitDir))
                 .findGitDir()
                 .build();
 

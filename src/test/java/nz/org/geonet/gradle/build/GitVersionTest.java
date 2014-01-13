@@ -13,7 +13,7 @@ public class GitVersionTest {
 
     @BeforeClass
     public static void setup() {
-        buildVersion = new GitVersion();
+        buildVersion = new GitVersion("/home/geoffc/GeoNet/gradle-build-version-plugin");
     }
 
     @Test

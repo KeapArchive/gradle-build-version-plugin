@@ -10,10 +10,10 @@ class BuildVersionExtension {
     String snapShotQuantifier = "-SNAPSHOT"
     boolean isRelease = false
 
-    private final GitVersion gitVersion
+    private GitVersion gitVersion
 
-    public BuildVersionExtension() {
-        gitVersion = new GitVersion()
+    public setGitVersion(GitVersion gitVersion) {
+         this.gitVersion = gitVersion
     }
 
     String getVersion() {
@@ -35,6 +35,7 @@ class BuildVersionExtension {
                     "versionSplitter: \"" + versionSplitter + "\"\n" +
                     "snapShotQuantifier: \"" + snapShotQuantifier + "\"\n" +
                     "isRelease: \"" + isRelease + "\"\n" +
+                    "git dir: \"" + gitVersion.gitDir + "\"\n" +
                     "\n" +
                     "Probable causes are:\n" +
                     "\n" +
