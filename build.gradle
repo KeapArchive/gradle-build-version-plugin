@@ -7,6 +7,10 @@ group = 'nz.org.geonet'
 // Dog food in the build version from a previous release of this project.
 version = buildVersion.version
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.9'
+}
+
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
