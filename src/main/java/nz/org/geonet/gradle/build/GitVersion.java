@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -39,7 +40,7 @@ public class GitVersion {
      * @param versionSplitter    the separator in the version number.  Must allow spitting the version number to integers.
      * @param snapShotQuantifier the quantifier for snapshots.
      * @param snapShotQuantifier a string to identify SNAPSHOTS to add to the end of the returned buildVersion.
-     * @param isRelease true for a release (no snapShotQuantifier), false to add the snapShotQuantifier
+     * @param isRelease          true for a release (no snapShotQuantifier), false to add the snapShotQuantifier
      * @return
      * @throws IOException
      * @throws GitAPIException
@@ -106,7 +107,13 @@ public class GitVersion {
             // We only want annotated tags.  It's inefficient to shorten all the
             // tag names but it lets the releaseTagPattern contain end of line
             // anchors (and not have to deal with the preceding refs/tags).
-            if (walk.parseTag(objectId) instanceof RevTag) {
+            boolean isTag = false;
+
+            try {
+                if (walk.parseTag(objectId) instanceof RevTag) isTag = true;
+            } catch (IncorrectObjectTypeException ignored) {}
+
+            if (isTag) {
                 String tagName = Repository.shortenRefName(ref.getName());
                 Matcher releaseTagMatcher = tagPattern.matcher(tagName);
                 if (releaseTagMatcher.matches()) {
