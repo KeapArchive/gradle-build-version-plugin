@@ -4,7 +4,7 @@ import org.gradle.api.GradleScriptException
 
 class BuildVersionExtension {
 
-    String releaseTagPattern = "^release-(\\d+\\.\\d+\\.\\d)"
+    String releaseTagPattern = "^release-(\\d+\\.\\d+\\.\\d+)"
     String matchGroup = "\$1"
     String versionSplitter = "."
     String snapShotQuantifier = "-SNAPSHOT"

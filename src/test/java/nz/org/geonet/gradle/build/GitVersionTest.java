@@ -25,8 +25,9 @@ public class GitVersionTest {
 
     @Test
     public void testGetNextSnapShotVersion() {
-        Assert.assertEquals("0.0.1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0.0.0", "^(release-)(\\d+\\.\\d+\\.\\d)$", "$2", ".", "-SNAPSHOT"));
-        Assert.assertEquals("0.0.1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0.0.0", "^release-(\\d+\\.\\d+\\.\\d)$", "$1", ".", "-SNAPSHOT"));
+        Assert.assertEquals("0.0.1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0.0.0", "^(release-)(\\d+\\.\\d+\\.\\d+)$", "$2", ".", "-SNAPSHOT"));
+        Assert.assertEquals("1.0.15-SNAPSHOT", buildVersion.nextSnapShotVersion("release-1.0.14", "^(release-)(\\d+\\.\\d+\\.\\d+)$", "$2", ".", "-SNAPSHOT"));
+        Assert.assertEquals("0.0.1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0.0.0", "^release-(\\d+\\.\\d+\\.\\d+)$", "$1", ".", "-SNAPSHOT"));
         Assert.assertEquals("0.1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0.0", "^(release-)(\\d+\\.\\d+)$", "$2", ".", "-SNAPSHOT"));
         Assert.assertEquals("1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0", "^(release-)(\\d+)$", "$2", ".", "-SNAPSHOT"));
     }
