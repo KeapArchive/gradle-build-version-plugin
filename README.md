@@ -2,6 +2,8 @@
 
 A plugin to find the build version from tags on a Git repo.
 
+[![Build Status](https://snap-ci.com/RIKRrXhbI6Fnlo3BeWeJtPMkQVOiBrZvMWJvhb4UGwU/build_image)](https://snap-ci.com/projects/GeoNet/gradle-build-version-plugin/build_history)
+
 ## Quick Start
 
 Tag releases in your Git repo with annotated tags like `release-1.0.0`.  If you are just starting development use a tag of
