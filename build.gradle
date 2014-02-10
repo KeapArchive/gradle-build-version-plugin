@@ -40,6 +40,12 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
+def publishUrl = 'https://geonet.artifactoryonline.com/geonet/public-snapshots'
+
+if (System.getProperty("isRelease") && "true".equals(System.getProperty("isRelease"))) {
+    publishUrl = 'https://geonet.artifactoryonline.com/geonet/public-releases'
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -48,7 +54,7 @@ publishing {
     }
     repositories {
         maven {
-            url geonetPublicReleases
+            url 'https://geonet.artifactoryonline.com/geonet/public-releases'
             credentials {
                 username geonetUser
                 password geonetPassword
