@@ -9,9 +9,14 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,6 +133,48 @@ public class GitVersion {
         Collections.reverse(releaseTags);
 
         return releaseTags.size() > 0 ? releaseTags.get(0) : null;
+    }
+
+
+    /**
+     *
+     * @return the treeish of the head commit for the git repo.
+     * @throws IOException
+     * @throws GitAPIException
+     */
+    String headCommitTreeish() throws IOException, GitAPIException {
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        Repository repository = builder
+                .setWorkTree(new File(gitDir))
+                .findGitDir()
+                .build();
+
+        Iterable<RevCommit> logs = new Git(repository).log()
+                .all()
+                .call();
+
+        return logs.iterator().next().getName();
+    }
+
+    /**
+     *
+     * @return the date time UTC now formatted like 20140415215719
+     */
+    String dateTimeUTC() {
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+        DateTime dateTime = new DateTime().withZone(DateTimeZone.UTC);
+
+        return fmt.print(dateTime);
+    }
+
+    /**
+     *
+     * @return a string composed of DT and the git treeish of the HEAD commit e.g., 20140415215719-git58b2c4870c
+     * @throws IOException
+     * @throws GitAPIException
+     */
+    String integrationVersion() throws IOException, GitAPIException {
+        return dateTimeUTC() + "-git" + headCommitTreeish().substring(0, 10);
     }
 
     /**
