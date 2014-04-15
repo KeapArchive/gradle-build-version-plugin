@@ -9,6 +9,7 @@ class BuildVersionExtension {
     String versionSplitter = "."
     String snapShotQuantifier = "-SNAPSHOT"
     boolean isRelease = false
+    boolean integrationVersion = false
 
     private GitVersion gitVersion
 
@@ -20,13 +21,17 @@ class BuildVersionExtension {
         String version = null
 
         try {
-            version = gitVersion.getBuildVersion(
-                    releaseTagPattern,
-                    matchGroup,
-                    versionSplitter,
-                    snapShotQuantifier,
-                    isRelease
-            )
+            if (integrationVersion == false) {
+                version = gitVersion.getBuildVersion(
+                        releaseTagPattern,
+                        matchGroup,
+                        versionSplitter,
+                        snapShotQuantifier,
+                        isRelease
+                )
+            } else {
+                version = gitVersion.integrationVersion()
+            }
         } catch (Exception e) {
             throw new GradleScriptException("Cannot suss a build version for you.\n\n" +
                     "Using:\n\n" +
@@ -35,6 +40,7 @@ class BuildVersionExtension {
                     "versionSplitter: \"" + versionSplitter + "\"\n" +
                     "snapShotQuantifier: \"" + snapShotQuantifier + "\"\n" +
                     "isRelease: \"" + isRelease + "\"\n" +
+                    "integrationVersion: \"" + integrationVersion + "\"\n" +
                     "git dir: \"" + gitVersion.gitDir + "\"\n" +
                     "\n" +
                     "Probable causes are:\n" +

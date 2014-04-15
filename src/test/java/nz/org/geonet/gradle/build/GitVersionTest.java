@@ -1,10 +1,13 @@
 package nz.org.geonet.gradle.build;
 
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.io.IOException;
 
 @RunWith(JUnit4.class)
 public class GitVersionTest {
@@ -24,7 +27,7 @@ public class GitVersionTest {
     }
 
     @Test
-    public void testGetNextSnapShotVersion() {
+    public void testGetNextSnapShotVersion() throws IOException, GitAPIException {
         Assert.assertEquals("0.0.1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0.0.0", "^(release-)(\\d+\\.\\d+\\.\\d+)$", "$2", ".", "-SNAPSHOT"));
         Assert.assertEquals("1.0.15-SNAPSHOT", buildVersion.nextSnapShotVersion("release-1.0.14", "^(release-)(\\d+\\.\\d+\\.\\d+)$", "$2", ".", "-SNAPSHOT"));
         Assert.assertEquals("0.0.1-SNAPSHOT", buildVersion.nextSnapShotVersion("release-0.0.0", "^release-(\\d+\\.\\d+\\.\\d+)$", "$1", ".", "-SNAPSHOT"));
@@ -46,5 +49,21 @@ public class GitVersionTest {
     public void testGetBuildVersion() throws Exception {
         Assert.assertTrue(buildVersion.getBuildVersion("^(release-)(\\d+\\.\\d+\\.\\d)$", "$2", ".", "-SNAPSHOT", false).matches("\\d+\\.\\d+\\.\\d+-SNAPSHOT$"));
         Assert.assertTrue(buildVersion.getBuildVersion("^(release-)(\\d+\\.\\d+\\.\\d)$", "$2", ".", "-SNAPSHOT", true).matches("\\d+\\.\\d+\\.\\d+$"));
+    }
+
+    @Test
+    public void testHeadTreeish() throws IOException, GitAPIException {
+        // Not very easy to test in any meaningful way.
+        Assert.assertTrue(buildVersion.headCommitTreeish().matches("\\w+"));
+    }
+
+    @Test
+    public void testDateTimeUTC() {
+        Assert.assertTrue(buildVersion.dateTimeUTC().matches("\\d{14}"));
+    }
+
+    @Test
+    public void testIntegrationVersion() throws IOException, GitAPIException {
+        Assert.assertTrue(buildVersion.integrationVersion().matches("\\d{14}-git\\w{10}"));
     }
 }

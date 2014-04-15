@@ -47,6 +47,21 @@ Run the build with a system property e.g.,
 
 And for the above example (release-1.0.3 as the latest tag) the project version will be 1.0.3
 
+### Integration Builds
+
+Uses a Date Time string and Git treeish to provide the buildVersion.version  There is no need to add tags to your repo.
+The config below will create version numbers like `20140415215719-git58b2c4870c`.
+
+```
+apply plugin: 'build-version'
+
+version = buildVersion.version
+
+buildVersion {
+    integrationVersion = true
+}
+```
+
 ## Configuration
 
 The way that tags are matched can be configured.  This is very flexible so you can follow your own scheme, and if you need to,
