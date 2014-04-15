@@ -1,10 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
-apply plugin: 'build-version'
 
 group = 'nz.org.geonet'
-// Dog food in the build version from a previous release of this project.
 version = '1.0.3-SNAPSHOT'
 
 task wrapper(type: Wrapper) {
@@ -18,18 +16,6 @@ repositories {
     mavenCentral()
 }
 
-buildscript {
-    repositories {
-        maven {
-            url 'https://geonet.artifactoryonline.com/geonet/public-releases'
-        }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '1.0.1'
-    }
-}
-
 dependencies {
     compile gradleApi()
     compile localGroovy()
@@ -37,12 +23,6 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '15.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.1'
     testCompile group: 'junit', name: 'junit', version: '4.11'
-}
-
-def publishUrl = 'https://geonet.artifactoryonline.com/geonet/public-snapshots'
-
-if (System.getProperty("isRelease") && "true".equals(System.getProperty("isRelease"))) {
-    publishUrl = 'https://geonet.artifactoryonline.com/geonet/public-releases'
 }
 
 publishing {
