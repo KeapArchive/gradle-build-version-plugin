@@ -174,7 +174,7 @@ public class GitVersion {
      * @throws GitAPIException
      */
     String integrationVersion() throws IOException, GitAPIException {
-        return dateTimeUTC() + "_git" + headCommitTreeish().substring(0, 10);
+        return dateTimeUTC() + "_git" + headCommitTreeish().substring(0, 7);
     }
 
     /**
