@@ -64,6 +64,6 @@ public class GitVersionTest {
 
     @Test
     public void testIntegrationVersion() throws IOException, GitAPIException {
-        Assert.assertTrue(buildVersion.integrationVersion().matches("\\d{14}-git\\w{10}"));
+        Assert.assertTrue(buildVersion.integrationVersion().matches("\\d{14}_git\\w{10}"));
     }
 }
