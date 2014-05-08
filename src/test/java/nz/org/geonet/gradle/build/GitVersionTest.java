@@ -64,6 +64,11 @@ public class GitVersionTest {
 
     @Test
     public void testIntegrationVersion() throws IOException, GitAPIException {
-        Assert.assertTrue(buildVersion.integrationVersion().matches("\\d{14}_git\\w{7}"));
+        if ("true".equals(System.getenv("SNAP_CI"))) {
+            Assert.assertTrue(buildVersion.integrationVersion().matches("snap\\d+_git\\w{7}"));
+
+        } else {
+            Assert.assertTrue(buildVersion.integrationVersion().matches("\\d{14}_git\\w{7}"));
+        }
     }
 }
