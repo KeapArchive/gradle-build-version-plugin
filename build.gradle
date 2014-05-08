@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 
 group = 'nz.org.geonet'
-version = '1.0.4'
+version = '1.0.5-SNAPSHOT'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.9'
