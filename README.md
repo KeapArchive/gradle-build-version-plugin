@@ -50,7 +50,10 @@ And for the above example (release-1.0.3 as the latest tag) the project version 
 ### Integration Builds
 
 Uses a Date Time string and Git treeish to provide the buildVersion.version  There is no need to add tags to your repo.
-The config below will create version numbers like `20140415215719-git58b2c4870c`.
+The config below will create version numbers like `20140415215719_git58b2c48`.
+
+If the build is running on snap-ci https://snap-ci.com/ then the counter for the pipeline will be used instead of the
+  Date Time in combination with the Git treeish e.g. `snap10_git58b2c48`.
 
 ```
 apply plugin: 'build-version'

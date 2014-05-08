@@ -168,13 +168,28 @@ public class GitVersion {
     }
 
     /**
+     * Finds a integration version number for the build.  If the build is running on snap the
+     * use the pipeline number.  Otherwise use the date time of the build.  Combines the snap
+     * pipeline number or the date time with a shortened git commit treeish.
      *
-     * @return a string composed of DT and the git treeish of the HEAD commit e.g., 20140415215719-git58b2c4870c
+     * @return a string composed representing the build version.
      * @throws IOException
      * @throws GitAPIException
      */
     String integrationVersion() throws IOException, GitAPIException {
-        return dateTimeUTC() + "_git" + headCommitTreeish().substring(0, 7);
+
+        String prefix = "";
+
+        if ("true".equals(System.getenv("SNAP_CI"))) {
+            String snapBuildNumber = System.getenv("SNAP_PIPELINE_COUNTER");
+            if (snapBuildNumber != null && snapBuildNumber.matches("\\d+")) {
+                prefix = "snap" + snapBuildNumber;
+            }
+        } else {
+            prefix = dateTimeUTC();
+        }
+
+        return prefix + "_git" + headCommitTreeish().substring(0, 7);
     }
 
     /**
