@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '1.0.1'
+        classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '1.0.4'
     }
 }
 
