@@ -1,8 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
+apply plugin: 'maven'
 
-group = 'nz.org.geonet'
+group = 'com.infusionsoft.pancakes'
 version = '1.0.5-SNAPSHOT'
 
 task wrapper(type: Wrapper) {
@@ -32,12 +33,6 @@ publishing {
         }
     }
     repositories {
-        maven {
-            url 'https://geonet.artifactoryonline.com/geonet/public-releases'
-            credentials {
-                username geonetUser
-                password geonetPassword
-            }
-        }
+        mavenLocal()
     }
 }

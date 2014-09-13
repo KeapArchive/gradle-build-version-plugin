@@ -2,8 +2,6 @@
 
 A plugin to find the build version from tags on a Git repo.
 
-[![Build Status](https://snap-ci.com/RIKRrXhbI6Fnlo3BeWeJtPMkQVOiBrZvMWJvhb4UGwU/build_image)](https://snap-ci.com/projects/GeoNet/gradle-build-version-plugin/build_history)
-
 ## Quick Start
 
 Tag releases in your Git repo with annotated tags like `release-1.0.0`.  If you are just starting development use a tag of
@@ -20,12 +18,12 @@ version = buildVersion.version
 buildscript {
     repositories {
         maven {
-            url 'https://geonet.artifactoryonline.com/geonet/public-releases'
+            url 'https://scm.infusiontest.com/nexus/content/groups/infusionsoft/'
         }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'nz.org.geonet', name: 'gradle-build-version-plugin', version: '1.0.4'
+        classpath group: 'com.infusionsoft.pancakes', name: 'gradle-build-version-plugin', version: '1.0.4'
     }
 }
 
@@ -46,24 +44,6 @@ Run the build with a system property e.g.,
 ```
 
 And for the above example (release-1.0.3 as the latest tag) the project version will be 1.0.3
-
-### Integration Builds
-
-Uses a Date Time string and Git treeish to provide the buildVersion.version  There is no need to add tags to your repo.
-The config below will create version numbers like `20140415215719_git58b2c48`.
-
-If the build is running on snap-ci https://snap-ci.com/ then the counter for the pipeline will be used instead of the
-  Date Time in combination with the Git treeish e.g. `snap10_git58b2c48`.
-
-```
-apply plugin: 'build-version'
-
-version = buildVersion.version
-
-buildVersion {
-    integrationVersion = true
-}
-```
 
 ## Configuration
 
