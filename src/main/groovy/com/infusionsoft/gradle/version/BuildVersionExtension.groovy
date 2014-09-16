@@ -1,5 +1,8 @@
 package com.infusionsoft.gradle.version
 
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+
 class BuildVersionExtension {
 
     String releaseTagPattern = "^release-(\\d+\\.\\d+\\.\\d+)"
@@ -24,7 +27,11 @@ class BuildVersionExtension {
                 releaseSuffix,
                 snapshotSuffix,
                 releaseTagIfNone)
-        GitVersionResolver gitVersionResolver = new GitVersionResolver(projectPath, tagSomething)
+        Repository repo = new FileRepositoryBuilder()
+                .setWorkTree(new File(projectPath))
+                .findGitDir(new File(projectPath))
+                .build()
+        GitVersionResolver gitVersionResolver = new GitVersionResolver(repo, tagSomething)
         String version = gitVersionResolver.getVersion(isRelease)
 
         return version

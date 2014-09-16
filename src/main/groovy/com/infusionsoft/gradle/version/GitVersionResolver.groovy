@@ -37,8 +37,8 @@ public class GitVersionResolver {
     final Repository repo;
 
 
-    public GitVersionResolver(String projectPath, TagOptions tagSomething) throws IOException, GitAPIException {
-        Preconditions.checkNotNull(projectPath)
+    public GitVersionResolver(Repository repo, TagOptions tagSomething) throws IOException, GitAPIException {
+        Preconditions.checkNotNull(repo)
         Preconditions.checkNotNull(tagSomething)
         versionSplitter = tagSomething.getVersionSplitter()
         releaseTagPattern = tagSomething.getReleaseTagPattern()
@@ -48,10 +48,7 @@ public class GitVersionResolver {
         releaseTagIfNone = tagSomething.getReleaseTagIfNone()
         compiledPattern = Pattern.compile(releaseTagPattern)
 
-        repo = new FileRepositoryBuilder()
-                .setWorkTree(new File(projectPath))
-                .findGitDir()
-                .build()
+        this.repo = repo
         namedCommits = mapOfCommits()
     }
 
@@ -128,6 +125,9 @@ public class GitVersionResolver {
     private boolean hasReleaseTagOnHead() {
         boolean isRelease = false
         ObjectId head = repo.resolve("HEAD")
+        if (head == null) {
+            return false
+        }
         RevWalk walk = new RevWalk(repo)
         RevCommit headCommit = walk.parseCommit(head)
         final Collection<String> objectTags = namedCommits.get(headCommit.getId())
@@ -166,7 +166,7 @@ public class GitVersionResolver {
             if (isReleaseTag(releaseTagIfNone)) {
                 return releaseTagIfNone
             } else {
-                throw new GradleScriptException("Don't do it bro, not valid default tag", new IllegalArgumentException())
+                throw new GradleScriptException("Unable to find a release tag to base our version on and no valid default release tag has been supplied", new IllegalArgumentException())
             }
         }
         RevWalk walk = new RevWalk(repo)
@@ -201,7 +201,7 @@ public class GitVersionResolver {
         if (isReleaseTag(releaseTagIfNone)) {
             return releaseTagIfNone
         } else {
-            throw new GradleScriptException("Don't do it bro, not valid default tag", new IllegalArgumentException())
+            throw new GradleScriptException("Unable to find a release tag to base our version on and no valid default release tag has been supplied", new IllegalArgumentException())
         }
 
     }
