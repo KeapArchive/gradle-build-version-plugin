@@ -6,6 +6,8 @@ import org.gradle.api.Project
 class BuildVersionPlugin implements Plugin<Project> {
 
     void apply(Project project) {
+        JgitUtil.setJgitToUseSshAgent()
+
         project.configure(project) {
             BuildVersionExtension extension = extensions.create("buildVersion", BuildVersionExtension)
             extension.setProjectPath(project.getRootProject().projectDir.absolutePath)
