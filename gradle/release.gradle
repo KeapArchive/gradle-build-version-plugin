@@ -1,14 +1,15 @@
 apply plugin: 'maven'
 
 configurations {
-    def nexusUsername = project.hasProperty("nexusUsername") ? project.nexusUsername : ''
-    def nexusPassword = project.hasProperty("nexusPassword") ? project.nexusPassword : ''
+    def repositoryUsername = project.hasProperty("repositoryUsername") ? project.repositoryUsername : ''
+    def repositoryPassword = project.hasProperty("repositoryPassword") ? project.repositoryPassword : ''
+    def repositoryUrl = project.hasProperty("repositoryUrl") ? project.repositoryUrl : ''
 
     uploadArchives {
         repositories {
             mavenDeployer {
-                repository (url: 'https://scm.infusiontest.com/nexus/content/repositories/builds') {
-                    authentication(userName: nexusUsername, password: nexusPassword)
+                repository (url: repositoryUrl) {
+                    authentication(userName: repositoryUsername, password: repositoryPassword)
                 }
             }
         }

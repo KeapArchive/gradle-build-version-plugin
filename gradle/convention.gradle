@@ -23,7 +23,6 @@ idea {
 
 repositories {
     mavenLocal()
-    maven { url "https://scm.infusiontest.com/nexus/content/groups/infusionsoft" }
     jcenter()
     mavenCentral()
 }
