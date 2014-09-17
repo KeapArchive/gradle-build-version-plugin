@@ -1,16 +1,19 @@
 package com.infusionsoft.gradle.version
 
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+
 class BuildVersionExtension {
 
-    String releaseTagPattern = "^release-(\\d+\\.\\d+\\.\\d+)"
+    String releaseTagPattern = '^release-(\\d+\\.\\d+\\.\\d+)'
     String matchGroup = "\$1"
-    String versionSplitter = "."
-    String snapshotSuffix = "-SNAPSHOT"
-    String releaseSuffix = ""
-    String releaseTagIfNone = "release-0.0.0"
+    String versionSplitter = '.'
+    String snapshotSuffix = '-SNAPSHOT'
+    String releaseSuffix = ''
+    String releaseTagIfNone = 'release-0.0.0'
     boolean isRelease = false
 
-    private String projectPath;
+    private String projectPath
 
     void setProjectPath(String projectPath) {
         this.projectPath = projectPath
@@ -24,10 +27,12 @@ class BuildVersionExtension {
                 releaseSuffix,
                 snapshotSuffix,
                 releaseTagIfNone)
-        GitVersionResolver gitVersionResolver = new GitVersionResolver(projectPath, tagSomething)
-        String version = gitVersionResolver.getVersion(isRelease)
-
-        return version
+        Repository repo = new FileRepositoryBuilder()
+                .setWorkTree(new File(projectPath))
+                .findGitDir(new File(projectPath))
+                .build()
+        GitVersionResolver gitVersionResolver = new GitVersionResolver(repo, tagSomething)
+        gitVersionResolver.getVersion(isRelease)
     }
 
 }
