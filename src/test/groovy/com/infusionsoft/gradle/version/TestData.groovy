@@ -41,6 +41,15 @@ class TestData {
         repository
     }
 
+    static Repository setupCheckedOutPreviousReleaseTagWithUncommittedChangesState(Repository repository, String expectedVersion) {
+        setupCheckedOutPreviousReleaseTagState(repository, expectedVersion)
+        Git git = new Git(repository)
+        File newFile = new File(repository.directory.parentFile.absoluteFile, 'newFile')
+        newFile.createNewFile()
+        git.add().addFilepattern('newFile').call()
+        repository
+    }
+
     static Repository setupNewRepoWithSingleCommit(Repository repository) {
         Git git = new Git(repository)
         git.commit().setAuthor("Ratman", "ratman@infusionsoft.com").setMessage("I'm a single commit").call()

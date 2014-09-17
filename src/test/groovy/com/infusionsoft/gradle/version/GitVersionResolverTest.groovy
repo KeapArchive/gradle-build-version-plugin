@@ -32,9 +32,21 @@ class GitVersionResolverTest extends RepositoryTestCase {
 
     @Test
     void testGetVersionExistingRelease() {
-        String expectedVersion = '0.0.1' + defaultTagOptions.releaseSuffix
+        String tagVersion = '0.0.1'
+        String expectedVersion = tagVersion + defaultTagOptions.releaseSuffix
         GitVersionResolver gitVersionResolver = new GitVersionResolver(
-                TestData.setupCheckedOutPreviousReleaseTagState(db, expectedVersion),
+                TestData.setupCheckedOutPreviousReleaseTagState(db, tagVersion),
+                defaultTagOptions)
+        String version = gitVersionResolver.getVersion(false)
+        assertEquals(expectedVersion, version)
+    }
+
+    @Test
+    void testGetVersionExistingReleaseWithUncommittedChanges() {
+        String tagVersion = '0.0.1'
+        String expectedVersion = tagVersion + defaultTagOptions.snapshotSuffix
+        GitVersionResolver gitVersionResolver = new GitVersionResolver(
+                TestData.setupCheckedOutPreviousReleaseTagWithUncommittedChangesState(db, tagVersion),
                 defaultTagOptions)
         String version = gitVersionResolver.getVersion(false)
         assertEquals(expectedVersion, version)

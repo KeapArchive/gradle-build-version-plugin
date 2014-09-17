@@ -1,5 +1,7 @@
 package com.infusionsoft.gradle.version
 
+import org.eclipse.jgit.api.Status
+
 import static com.google.common.collect.Multimaps.*
 
 import com.google.common.base.Joiner
@@ -105,7 +107,11 @@ class GitVersionResolver {
 
     private String existingReleaseUseCase() throws IOException, GitAPIException {
         String releaseTag = findMostRecentTagMatch()
-        releaseTag.replaceAll(releaseTagPattern, matchGroup) + releaseSuffix
+        if (hasUncommittedChanges()) {
+            releaseTag.replaceAll(releaseTagPattern, matchGroup) + snapshotSuffix
+        } else {
+            releaseTag.replaceAll(releaseTagPattern, matchGroup) + releaseSuffix
+        }
     }
 
     private boolean isReleaseTag(String tagCandidate) {
@@ -121,6 +127,12 @@ class GitVersionResolver {
             final Git git = new Git(repo)
             git.tag().setName(tagName).call()
         }
+    }
+
+    private boolean hasUncommittedChanges() {
+        Git git = new Git(repo)
+        Status status = git.status().call()
+        status.hasUncommittedChanges()
     }
 
     private boolean isHeadTaggedAsRelease() throws IOException {
