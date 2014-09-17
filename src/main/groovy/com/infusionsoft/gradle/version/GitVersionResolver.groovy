@@ -114,7 +114,7 @@ class GitVersionResolver {
     }
 
     private void tagRepo(String tagName) throws GitAPIException {
-        if (hasReleaseTagOnHead()) {
+        if (isHeadTaggedAsRelease()) {
             throw new GradleScriptException(
                     'A commit should have at most a single release version', new IllegalStateException())
         } else {
@@ -123,40 +123,11 @@ class GitVersionResolver {
         }
     }
 
-    private boolean hasReleaseTagOnHead() {
-        boolean isRelease = false
-        ObjectId head = repo.resolve(HEAD)
-        if (head == null) {
-            return false
-        }
-        RevWalk walk = new RevWalk(repo)
-        RevCommit headCommit = walk.parseCommit(head)
-        final Collection<String> objectTags = namedCommits.get(headCommit.id)
-
-        if (objectTags != null && objectTags.size() > 0) {
-            for (String tagName : objectTags) {
-                final Matcher releaseTagMatcher = compiledPattern.matcher(tagName)
-                if (releaseTagMatcher.matches()) {
-                    isRelease = true
-                    break
-                }
-            }
-        }
-
-        isRelease
-    }
-
     private boolean isHeadTaggedAsRelease() throws IOException {
         ObjectId head = repo.resolve(HEAD)
-        final Collection<String> tags = namedCommits.get(head)
-        if (tags != null && tags.size() != 0) {
-            for (String tag : tags) {
-                if (isReleaseTag(tag)) {
-                    return true
-                }
-            }
+        namedCommits.get(head).any {
+            isReleaseTag(it)
         }
-        false
     }
 
     private String findMostRecentTagMatch() throws IOException, GitAPIException {
