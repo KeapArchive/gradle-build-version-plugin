@@ -1,0 +1,9 @@
+repositories {
+    mavenLocal()
+    maven { url "https://scm.infusiontest.com/nexus/content/groups/infusionsoft" }
+    jcenter()
+    mavenCentral()
+}
+dependencies {
+    classpath 'net.saliman:gradle-cobertura-plugin:2.2.4'
+}

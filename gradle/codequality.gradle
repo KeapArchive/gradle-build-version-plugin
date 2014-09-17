@@ -1,0 +1,35 @@
+apply plugin: 'cobertura'
+
+cobertura {
+    coverageFormats << 'xml'
+}
+
+apply plugin: 'codenarc'
+
+codenarc {
+    ignoreFailures = true
+    reportFormat = 'xml'
+}
+
+test {
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+}
+
+apply plugin: 'sonar-runner'
+
+sonarRunner {
+    sonarProperties {
+        property 'sonar.host.url', project.hasProperty('sonarServerUrl') ? project.sonarServerUrl : 'http://localhost'
+        property 'sonar.login', project.hasProperty('sonarServerUsername') ? project.sonarServerUsername : ''
+        property 'sonar.password', project.hasProperty('sonarServerPassword') ? project.sonarServerPassword : ''
+        property 'sonar.jdbc.url', project.hasProperty('sonarDbUrl') ? project.sonarDbUrl : 'jdbc:mysql://localhost:3306/sonar'
+        property 'sonar.jdbc.driverClassName', 'com.mysql.jdbc.Driver'
+        property 'sonar.jdbc.username', project.hasProperty('sonarDbUsername') ? project.sonarDbUsername : ''
+        property 'sonar.jdbc.password', project.hasProperty('sonarDbPassword') ? project.sonarDbPassword : ''
+
+        property 'sonar.groovy.codenarc.reportPath', codenarc.reportsDir.absolutePath + '/main.xml'
+        property 'sonar.groovy.cobertura.reportPath', cobertura.coverageReportDir.absolutePath + '/coverage.xml'
+    }
+}

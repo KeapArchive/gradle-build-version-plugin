@@ -1,23 +1,28 @@
 package com.infusionsoft.gradle.version
 
-import com.google.common.base.Preconditions
-import com.google.common.base.Strings
+import static com.google.common.base.Preconditions.*
+import static com.google.common.base.Strings.*
 
-public class TagOptions {
-    private String versionSplitter
-    private String releaseTagPattern
-    private String groupMatcher
-    private String releaseSuffix
-    private String snapshotSuffix
-    private String releaseTagIfNone
+class TagOptions {
+    private final String versionSplitter
+    private final String releaseTagPattern
+    private final String groupMatcher
+    private final String releaseSuffix
+    private final String snapshotSuffix
+    private final String releaseTagIfNone
 
-    public TagOptions(String versionSplitter, String releaseTagPattern, String groupMatcher, String releaseSuffix, String snapshotSuffix, String releaseTagIfNone) {
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(versionSplitter))
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(releaseTagPattern))
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(groupMatcher))
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(releaseSuffix))
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(snapshotSuffix))
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(releaseTagIfNone))
+    TagOptions(String versionSplitter,
+               String releaseTagPattern,
+               String groupMatcher,
+               String releaseSuffix,
+               String snapshotSuffix,
+               String releaseTagIfNone) {
+        checkArgument(!isNullOrEmpty(versionSplitter))
+        checkArgument(!isNullOrEmpty(releaseTagPattern))
+        checkArgument(!isNullOrEmpty(groupMatcher))
+        checkNotNull(releaseSuffix)
+        checkNotNull(snapshotSuffix)
+        checkArgument(!isNullOrEmpty(releaseTagIfNone))
         this.versionSplitter = versionSplitter
         this.releaseTagPattern = releaseTagPattern
         this.groupMatcher = groupMatcher
@@ -26,27 +31,27 @@ public class TagOptions {
         this.releaseTagIfNone = releaseTagIfNone
     }
 
-    public String getVersionSplitter() {
-        return versionSplitter
+    String getVersionSplitter() {
+        versionSplitter
     }
 
-    public String getReleaseTagPattern() {
-        return releaseTagPattern
+    String getReleaseTagPattern() {
+        releaseTagPattern
     }
 
-    public String getGroupMatcher() {
-        return groupMatcher
+    String getGroupMatcher() {
+        groupMatcher
     }
 
-    public String getReleaseSuffix() {
-        return releaseSuffix
+    String getReleaseSuffix() {
+        releaseSuffix
     }
 
-    public String getSnapshotSuffix() {
-        return snapshotSuffix
+    String getSnapshotSuffix() {
+        snapshotSuffix
     }
 
-    public String getReleaseTagIfNone() {
-        return releaseTagIfNone
+    String getReleaseTagIfNone() {
+        releaseTagIfNone
     }
 }

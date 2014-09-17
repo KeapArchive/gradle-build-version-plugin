@@ -11,7 +11,7 @@ class PushTagsTask extends DefaultTask {
     @TaskAction
     def pushTags() {
         Repository repo = new FileRepositoryBuilder()
-                .setWorkTree(new File(project.getRootProject().projectDir.absolutePath))
+                .setWorkTree(new File(project.rootProject.projectDir.absolutePath))
                 .findGitDir()
                 .build()
         Git git = new Git(repo)

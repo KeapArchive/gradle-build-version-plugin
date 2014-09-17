@@ -1,0 +1,18 @@
+apply plugin: 'maven'
+
+configurations {
+    def nexusUsername = project.hasProperty("nexusUsername") ? project.nexusUsername : ''
+    def nexusPassword = project.hasProperty("nexusPassword") ? project.nexusPassword : ''
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository (url: 'https://scm.infusiontest.com/nexus/content/repositories/builds') {
+                    authentication(userName: nexusUsername, password: nexusPassword)
+                }
+            }
+        }
+    }
+}
+
+task release(dependsOn: ['build', 'uploadArchives']) << {}
