@@ -3,7 +3,6 @@ buildscript {
 }
 
 group = 'com.infusionsoft.gradle'
-version = '1.0.5.RELEASE'
 
 apply from: "gradle/convention.gradle"
 //apply from: "gradle/codequality.gradle"

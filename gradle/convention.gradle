@@ -1,6 +1,18 @@
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'java'
+apply plugin: 'build-version'
+
+buildVersion {
+    releaseTagPattern = "^release-${project.name}-(\\d+\\.\\d+\\.\\d)"
+    releaseTagIfNone = "release-${project.name}-0.0.0"
+    matchGroup = "\$1"
+    versionSplitter = "."
+    snapshotSuffix = "-BATTER"
+    releaseSuffix = ".RELEASE"
+}
+
+version = buildVersion.version
 
 configurations {
     sourceCompatibility = 1.7
