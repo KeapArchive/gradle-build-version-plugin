@@ -10,8 +10,8 @@ class GitVersionResolverTest extends RepositoryTestCase {
 
     @Test
     void testGetVersionNewRelease() {
-        String previousVersion = "0.0.5" + defaultTagOptions.releaseSuffix
-        String expectedVersion = "0.0.6" + defaultTagOptions.releaseSuffix
+        String previousVersion = '0.0.5' + defaultTagOptions.releaseSuffix
+        String expectedVersion = '0.0.6' + defaultTagOptions.releaseSuffix
         GitVersionResolver gitVersionResolver = new GitVersionResolver(
                 TestData.setupOneCommitAheadOfReleaseTag(db, previousVersion),
                 defaultTagOptions)
@@ -21,8 +21,8 @@ class GitVersionResolverTest extends RepositoryTestCase {
 
     @Test
     void testGetVersionSnapshot() {
-        String previousVersion = "0.0.3" + defaultTagOptions.releaseSuffix
-        String expectedVersion = "0.0.4" + defaultTagOptions.snapshotSuffix
+        String previousVersion = '0.0.3' + defaultTagOptions.releaseSuffix
+        String expectedVersion = '0.0.4' + defaultTagOptions.snapshotSuffix
         GitVersionResolver gitVersionResolver = new GitVersionResolver(
                 TestData.setupOneCommitAheadOfReleaseTag(db, previousVersion),
                 defaultTagOptions)
@@ -32,10 +32,32 @@ class GitVersionResolverTest extends RepositoryTestCase {
 
     @Test
     void testGetVersionExistingRelease() {
-        String expectedVersion = "0.0.1" + defaultTagOptions.releaseSuffix
+        String expectedVersion = '0.0.1' + defaultTagOptions.releaseSuffix
         GitVersionResolver gitVersionResolver = new GitVersionResolver(
                 TestData.setupCheckedOutPreviousReleaseTagState(db, expectedVersion),
                 defaultTagOptions)
+        String version = gitVersionResolver.getVersion(false)
+        assertEquals(expectedVersion, version)
+    }
+
+    @Test
+    void testGetVersionFirstRelease() {
+        String expectedVersion = '0.0.1' + defaultTagOptions.releaseSuffix
+        GitVersionResolver gitVersionResolver = new GitVersionResolver(
+                TestData.setupNewRepoWithSingleCommit(db),
+                defaultTagOptions
+        )
+        String version = gitVersionResolver.getVersion(true)
+        assertEquals(expectedVersion, version)
+    }
+
+    @Test
+    void testGetVersionNoReleaseDeveloperUseCase() {
+        String expectedVersion = '0.0.1' + defaultTagOptions.snapshotSuffix
+        GitVersionResolver gitVersionResolver = new GitVersionResolver(
+                TestData.setupNewRepoWithSingleCommit(db),
+                defaultTagOptions
+        )
         String version = gitVersionResolver.getVersion(false)
         assertEquals(expectedVersion, version)
     }
