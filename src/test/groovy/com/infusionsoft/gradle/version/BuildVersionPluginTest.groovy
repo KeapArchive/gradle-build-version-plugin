@@ -20,6 +20,14 @@ class BuildVersionPluginTest extends RepositoryTestCase {
     }
 
     @Test
+    void testBuildVersionPluginAddsCurrentVersionTaskToProject() {
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: 'build-version'
+
+        assertTrue(project.tasks.currentVersion instanceof CurrentVersionTask)
+    }
+
+    @Test
     void testBuildVersionPluginSetsIsReleaseWhenSystemArgumentPassed() {
         Project project = ProjectBuilder.builder().build()
         System.setProperty("isRelease", "true")
