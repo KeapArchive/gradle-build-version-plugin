@@ -4,8 +4,9 @@ A plugin to find the build version from tags on a Git repo.
 
 ## Quick Start
 
-Tag releases in your Git repo with annotated tags like `release-1.0.0`.  If you are just starting development use a tag of
-`release-0.0.0`.
+Tag releases in your Git repo with annotated tags like `release-1.0.0`. If you currently don't have a release tag the plugin will
+ use `buildversion.releaseTagIfNone` as the base, for example say `buildversion.releaseTagIfNone = release-0.0.0` then the
+ generated version will return `release-0.0.1`.
 
 Add the build-version plugin to your build script and use the property `buildVersion.version` that it exposes to set the version
 for your project:
@@ -23,7 +24,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'com.infusionsoft.pancakes', name: 'gradle-build-version-plugin', version: '1.0.4'
+        classpath group: 'com.infusionsoft.gradle', name: 'build-version-plugin', version: '1.0.0'
     }
 }
 
@@ -31,19 +32,40 @@ buildscript {
 
 ### SNAPSHOT Builds
 
-Run with no other properties the plugin will search the Git repo for all tags that are like release-1.0.0, find the
-latest one, strip out the version number, increment the minor version, append -SNAPSHOT to the revision and return it.  e.g.,
- if the latest matching tag on the repo is release-1.0.3 then the project version will be 1.0.4-SNAPSHOT.
+The plugin makes assumptions based on the state of the git repositories regarding tags and commits. If as a developer I have
+checked out a repository, made some changes, committed then built this would produce a SNAPSHOT. For example, the repo that 
+has been checked out has a HEAD with a tag `release-1.0.4` referencing it. Changes are committed and the project is built,
+this will result in an artifact with the version `1.0.5-SNAPSHOT`.
 
 ### Release Builds.
 
-Run the build with a system property e.g.,
+Run the build with the system property `isRelease`. This will take the most recent tag, increment the least significant value, 
+append the `releaseSuffix` (if one has been configured) and tag the local working copy with a tag matching the `releaseTagPattern`.
 
 ```
-./gradlew clean  -DisRelease=true ...
+./gradlew clean -DisRelease=true ...
 ```
 
-And for the above example (release-1.0.3 as the latest tag) the project version will be 1.0.3
+For example, the repo gets checked out and is one or more commits ahead of the `release-1.0.5` tag. When the above gets called
+the artifact will be built as version 1.0.6 and the local working copy HEAD will be tagged with `release-1.0.6`.
+
+To make handling the tags a little easier we have supplied a `pushTags` task which will push all working copy tags up to origin,
+completely optional although we recommend executing this task after the release artifact has been uploaded. 
+
+### Rebuild Previous Release Build.
+
+Sometimes it is nice to check code out at a previous release to debug issues in production, in this case one would checkout
+a release tag:
+
+```
+git checkout release-1.0.4
+```
+
+At this point the plugin will detect that HEAD is referenced by a release tag and will build the artifact as such. The resulting
+artifact would have the version set as `1.0.4`.
+
+NOTE: If one were to add some changes and leave them uncommitted for an experiment this would lead to the artifact being built with
+the `snapshotSuffix` rather than the `releaseSuffix`.
 
 ## Configuration
 
@@ -55,21 +77,23 @@ apply plugin: 'build-version'
 
 buildVersion {
     releaseTagPattern = "^release-(\\d+\\.\\d+\\.\\d)"
+    releaseTagIfNone = "release-0.0.0"
     matchGroup = "\$1"
     versionSplitter = "."
-    snapShotQuantifier = "-SNAPSHOT"
+    snapshotSuffix = "-SNAPSHOT"
+    releaseSuffix = ""
 }
 
 version = buildVersion.version
-
-...
 ```
 
 * `releaseTagPattern` a regexp pattern to match the annotated release tags in your repo.  Make sure the version number part of tag
 matches in a group ().
+* `releaseTagIfNone` the plugin will use this as the previous release version when no release tag is found in the repo
 * `matchGroup` the identifier of the group that matches the version number part of the tag.
 * `versionSplitter` a string to use to split the version number part of the tag.  Must split it to return integers.
-* `snapShotQuantifier` a string to add to the end of the returned version number to identify a snapshot build.
+* `snapshotSuffix` a string to add to the end of the returned version number to identify a snapshot build.
+* `releaseSuffix` a string to add to the end of the returned version number to identify a release build.
 
 You can also set `isRelease` (boolean) in the buildVersion closure but it is most likely to be useful to set this by passing a System property
  on the command line:
