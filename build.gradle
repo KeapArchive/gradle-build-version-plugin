@@ -1,23 +1,42 @@
 buildscript {
-    apply from: "gradle/buildscript.gradle", to: buildscript
+    repositories {
+        def internalProxyRepositoryUrl = System.properties['internalProxyRepositoryUrl'] ?: 'https://scm.infusiontest.com/nexus/content/groups/infusionsoft/';
+
+        def externalProxyRepositoryUsername = System.properties['externalProxyRepositoryUsername'] ?: ''
+        def externalProxyRepositoryPassword = System.properties['externalProxyRepositoryPassword'] ?: ''
+        def externalProxyRepositoryUrl = System.properties['externalProxyRepositoryUrl'] ?: 'https://artifacts.sbsp.io/artifactory/repo/';
+
+        maven { url internalProxyRepositoryUrl }
+        maven {
+            url externalProxyRepositoryUrl
+            credentials {
+                username externalProxyRepositoryUsername
+                password externalProxyRepositoryPassword
+            }
+        }
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'com.infusionsoft.gradle:pancakes-build-plugin:1.0.+'
+    }
 }
 
 group = 'com.infusionsoft.gradle'
+description = 'Plugin to automatically set version information based on tags'
 
-apply from: "gradle/convention.gradle"
-//apply from: "gradle/codequality.gradle"
-apply from: "gradle/release.gradle"
 apply plugin: 'groovy'
+apply plugin: 'pancakes-plugin'
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'org.eclipse.jgit:org.eclipse.jgit:3.2.0.201312181205-r'
+    compile "org.eclipse.jgit:org.eclipse.jgit:${jgit_version}"
     compile 'com.google.guava:guava:15.0'
     compile 'joda-time:joda-time:2.1'
     compile 'com.jcraft:jsch.agentproxy.jsch:0.0.7'
     compile 'com.jcraft:jsch.agentproxy.usocket-jna:0.0.7'
     compile 'com.jcraft:jsch.agentproxy.sshagent:0.0.7'
     testCompile 'junit:junit:4.11'
-    testCompile 'org.eclipse.jgit:org.eclipse.jgit.junit:3.2.0.201312181205-r'
+    testCompile "org.eclipse.jgit:org.eclipse.jgit.junit:${jgit_version}"
 }
