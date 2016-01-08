@@ -1,5 +1,6 @@
 package com.infusionsoft.gradle.version
 
+import groovy.util.logging.Slf4j
 import org.eclipse.jgit.api.Status
 
 import static com.google.common.collect.Multimaps.*
@@ -25,6 +26,7 @@ import org.gradle.api.GradleScriptException
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
+@Slf4j
 class GitVersionResolver {
 
     public static final String HEAD = 'HEAD'
@@ -182,7 +184,7 @@ class GitVersionResolver {
 
             }
         } finally {
-            walk.release()
+            walk.close()
         }
         if (isReleaseTag(releaseTagIfNone)) {
             return releaseTagIfNone
@@ -228,7 +230,9 @@ class GitVersionResolver {
                     targetObjectId = revTag.object.id
                     revTagName = revTag.tagName
                 }
-            } catch (IncorrectObjectTypeException ignored) {
+                log.debug("${tagRef} -> ${revTag}")
+            } catch (IncorrectObjectTypeException e) {
+                log.info("Incorrect object type for ref ${tagRef}", e)
             }
 
             if (targetObjectId != null) {
@@ -236,8 +240,8 @@ class GitVersionResolver {
             }
         }
 
-        walk.release()
+        walk.close()
 
-        commits
+        return commits
     }
 }
