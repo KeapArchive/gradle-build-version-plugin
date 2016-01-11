@@ -60,11 +60,21 @@ class GitVersionResolver {
 
     String getVersion(boolean isRelease) throws IOException, GitAPIException {
         if (isRelease) {
-            newReleaseUseCase()
-        } else if (isHeadTaggedAsRelease()) {
-            existingReleaseUseCase()
+            if (hasUncommittedChanges()) {
+                throw new GradleScriptException('Cannot perform release with uncommitted changes', new IllegalStateException())
+            }
+
+            if (isHeadTaggedAsRelease()) {
+                existingReleaseUseCase()
+            } else {
+                newReleaseUseCase()
+            }
         } else {
-            developerUseCase()
+            if (hasUncommittedChanges() || !isHeadTaggedAsRelease()) {
+                developerUseCase()
+            } else {
+                existingReleaseUseCase()
+            }
         }
     }
 
@@ -109,11 +119,7 @@ class GitVersionResolver {
 
     private String existingReleaseUseCase() throws IOException, GitAPIException {
         String releaseTag = findMostRecentTagMatch()
-        if (hasUncommittedChanges()) {
-            releaseTag.replaceAll(releaseTagPattern, matchGroup) + snapshotSuffix
-        } else {
-            releaseTag.replaceAll(releaseTagPattern, matchGroup) + releaseSuffix
-        }
+        releaseTag.replaceAll(releaseTagPattern, matchGroup) + releaseSuffix
     }
 
     private boolean isReleaseTag(String tagCandidate) {
