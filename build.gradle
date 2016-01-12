@@ -37,6 +37,6 @@ dependencies {
     compile 'com.jcraft:jsch.agentproxy.jsch:0.0.7'
     compile 'com.jcraft:jsch.agentproxy.usocket-jna:0.0.7'
     compile 'com.jcraft:jsch.agentproxy.sshagent:0.0.7'
-    testCompile 'junit:junit:4.11'
+
     testCompile "org.eclipse.jgit:org.eclipse.jgit.junit:${jgit_version}"
 }
