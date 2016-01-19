@@ -52,6 +52,9 @@ class TestData {
 
     static Repository setupNewRepoWithSingleCommit(Repository repository) {
         Git git = new Git(repository)
+        File newFile = new File(repository.directory.parentFile.absoluteFile, 'newFile')
+        newFile.createNewFile()
+        git.add().addFilepattern('newFile').call()
         git.commit().setAuthor("Ratman", "ratman@infusionsoft.com").setMessage("I'm a single commit").call()
         repository
     }

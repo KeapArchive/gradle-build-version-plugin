@@ -28,7 +28,6 @@ class BuildVersionExtension {
                 snapshotSuffix,
                 releaseTagIfNone)
         Repository repo = new FileRepositoryBuilder()
-                .setWorkTree(new File(projectPath))
                 .findGitDir(new File(projectPath))
                 .build()
         GitVersionResolver gitVersionResolver = new GitVersionResolver(repo, tagSomething)
