@@ -2,19 +2,11 @@ package com.infusionsoft.gradle.version
 
 import static org.junit.Assert.assertTrue
 
-import org.eclipse.jgit.junit.RepositoryTestCase
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
-class BuildVersionPluginTest extends RepositoryTestCase {
-    @BeforeMethod
-    public void setUp() throws Exception {
-        // superclass uses Junit @Before
-        super.setUp();
-    }
-
+class BuildVersionPluginTest extends TestNGRepositoryTestCase {
     @Test
     void testBuildVersionPluginAddsPushTagsTaskToProject() {
         Project project = ProjectBuilder.builder().build()

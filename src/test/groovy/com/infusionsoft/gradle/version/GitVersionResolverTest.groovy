@@ -1,21 +1,12 @@
 package com.infusionsoft.gradle.version
 
-import org.eclipse.jgit.junit.RepositoryTestCase
-import org.gradle.api.GradleScriptException
-
 import static com.infusionsoft.gradle.version.TestData.defaultTagOptions
 import static org.junit.Assert.assertEquals
 
-import org.testng.annotations.BeforeMethod
+import org.gradle.api.GradleScriptException
 import org.testng.annotations.Test
 
-class GitVersionResolverTest extends RepositoryTestCase {
-    @BeforeMethod
-    public void setUp() throws Exception {
-        // superclass uses Junit @Before
-        super.setUp();
-    }
-
+class GitVersionResolverTest extends TestNGRepositoryTestCase {
     @Test
     void testGetVersionNewRelease() {
         String previousVersion = '0.0.5' + defaultTagOptions.releaseSuffix
