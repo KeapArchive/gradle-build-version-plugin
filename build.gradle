@@ -30,13 +30,14 @@ apply plugin: 'pancakes-plugin'
 
 dependencies {
     compile gradleApi()
-    compile localGroovy()
-    compile "org.eclipse.jgit:org.eclipse.jgit:${jgit_version}"
+
     compile 'com.google.guava:guava:15.0'
-    compile 'joda-time:joda-time:2.1'
     compile 'com.jcraft:jsch.agentproxy.jsch:0.0.7'
     compile 'com.jcraft:jsch.agentproxy.usocket-jna:0.0.7'
     compile 'com.jcraft:jsch.agentproxy.sshagent:0.0.7'
+    compile 'joda-time:joda-time:2.1'
+    compile 'org.codehaus.groovy:groovy:2.4.4'
+    compile "org.eclipse.jgit:org.eclipse.jgit:${jgit_version}"
 
     testCompile "org.eclipse.jgit:org.eclipse.jgit.junit:${jgit_version}"
 }
