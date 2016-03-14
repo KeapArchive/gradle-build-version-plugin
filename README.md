@@ -31,7 +31,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'com.infusionsoft.gradle', name: 'build-version-plugin', version: '1.0.0'
+        classpath group: 'com.infusionsoft.gradle', name: 'build-version-plugin', version: '1.0.+'
     }
 }
 
