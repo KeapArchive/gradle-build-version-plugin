@@ -17,7 +17,7 @@ class BuildVersionPlugin implements Plugin<Project> {
         }
 
         project.task('pushTags', type: PushTagsTask, group: TASK_GROUP, description: 'Pushes all tags on local working git clone to remote origin')
-        project.task('currentVersion', type: CurrentVersionTask, group: TASK_GROUP, description: 'Prints the current version as detected but the current state of the git repository')
+        project.task('currentVersion', type: CurrentVersionTask, group: TASK_GROUP, description: 'Prints the current version as detected by the current state of the git repository')
 
         if (System.getProperty(RELEASE_PROPERTY_KEY) && 'true' == (System.getProperty(RELEASE_PROPERTY_KEY))) {
             project.allprojects {
