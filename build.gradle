@@ -1,18 +1,14 @@
 buildscript {
     repositories {
-        def internalProxyRepositoryUrl = System.properties['internalProxyRepositoryUrl'] ?: 'https://scm.infusiontest.com/nexus/content/groups/infusionsoft/';
-
-        def externalProxyRepositoryUsername = System.properties['externalProxyRepositoryUsername'] ?: ''
-        def externalProxyRepositoryPassword = System.properties['externalProxyRepositoryPassword'] ?: ''
-        def externalProxyRepositoryUrl = System.properties['externalProxyRepositoryUrl'] ?: 'https://artifacts.sbsp.io/artifactory/repo/';
-
-        maven { url internalProxyRepositoryUrl }
         maven {
-            url externalProxyRepositoryUrl
+            url  'https://artifacts.sbsp.io/artifactory/repo/'
             credentials {
-                username externalProxyRepositoryUsername
-                password externalProxyRepositoryPassword
+                username System.properties['externalProxyRepositoryUsername']
+                password System.properties['externalProxyRepositoryPassword']
             }
+	    authentication {
+		basic(BasicAuthentication)
+	    }
         }
         mavenLocal()
     }
