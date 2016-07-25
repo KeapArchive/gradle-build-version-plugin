@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven {
-            url  'https://artifacts.sbsp.io/artifactory/repo/'
+            url 'https://infusionsoft.jfrog.io/infusionsoft/repo'
             credentials {
                 username System.properties['externalProxyRepositoryUsername']
                 password System.properties['externalProxyRepositoryPassword']
