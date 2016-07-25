@@ -14,7 +14,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.infusionsoft.gradle:pancakes-build-plugin:1.2.+'
+        classpath 'com.infusionsoft.gradle:pancakes-build-plugin:1.3.6'
     }
 }
 
